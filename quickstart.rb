@@ -74,7 +74,8 @@ response = service.list_events(calendar_id,
                                time_max:      DateTime.now.weeks_since(1).rfc3339,
                                time_min:      DateTime.now.rfc3339)
 
-response.items.select{|e| !e.summary.include?("朝会")}.each do |e|
+items = response.items
+items = items.select{|e| !e.summary.include?(ARGV[0])} if ARGV[0].present?
+items.each do |e|
   puts "- #{format_start_datetime(e.start)} #{e.summary}"
 end
-
